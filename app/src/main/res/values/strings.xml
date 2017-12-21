@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Assignment Organizer</string>
+    <string name="title_label">Title</string>
+    <string name="title_hint">Enter a title for the assignment</string>
+    <string name="details_label">Details</string>
+    <string name="completed_label">Completed</string>
+</resources>
