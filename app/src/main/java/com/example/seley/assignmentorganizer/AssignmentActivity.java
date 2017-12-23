@@ -1,14 +1,15 @@
 package com.example.seley.assignmentorganizer;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class AssignmentActivity extends AppCompatActivity {
+public class AssignmentActivity extends SingleFragmentActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_assignment);
-        getActionBar().hide();
+    protected Fragment createFragment()
+    {
+        return new AssignmentFragment();
     }
 }
