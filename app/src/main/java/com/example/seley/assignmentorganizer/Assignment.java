@@ -20,7 +20,7 @@ public class Assignment {
         return mId;
     }
 
-    public String getmTitle() {
+    public String getTitle() {
         return mTitle;
     }
 

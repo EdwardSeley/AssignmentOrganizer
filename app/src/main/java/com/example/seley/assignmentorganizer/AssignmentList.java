@@ -7,19 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class AssignmentSingleton {
-    private static AssignmentSingleton sAssignment;
+public class AssignmentList {
+
+    private static AssignmentList sAssignment;
 
     private List<Assignment> mAssignments;
 
-    public static AssignmentSingleton get(Context context)
+    public static AssignmentList get(Context context)
     {
         if (sAssignment == null)
-            sAssignment = new AssignmentSingleton(context);
+            sAssignment = new AssignmentList(context);
         return sAssignment;
     }
 
-    private AssignmentSingleton(Context context)
+    private AssignmentList(Context context)
     {
         mAssignments = new ArrayList<>();
         for (int i = 1; i <= 100; i++)
