@@ -12,7 +12,12 @@ public class Assignment {
 
     public Assignment()
     {
-        mId = UUID.randomUUID();
+        this(UUID.randomUUID());
+    }
+
+    public Assignment(UUID uuid)
+    {
+        mId = uuid;
         mDueDate = new Date();
     }
 

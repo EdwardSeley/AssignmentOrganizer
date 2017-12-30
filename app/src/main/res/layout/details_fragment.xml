@@ -7,10 +7,10 @@
     >
 
     <TextView
+        style="?android:listSeparatorTextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title_label"
-        style="?android:listSeparatorTextViewStyle"/>
+        android:text="@string/title_label" />
 
     <EditText
         android:id="@+id/assignment_title"
@@ -21,7 +21,19 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/details_label"
+        android:text="@string/subject_label"
+        style="?android:listSeparatorTextViewStyle"/>
+
+    <EditText
+        android:id="@+id/assignment_subject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/subject_hint" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/date_label"
         style="?android:listSeparatorTextViewStyle"/>
     
     <Button

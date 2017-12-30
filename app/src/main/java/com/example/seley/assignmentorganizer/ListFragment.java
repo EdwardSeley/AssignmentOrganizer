@@ -1,27 +1,59 @@
 package com.example.seley.assignmentorganizer;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+import java.util.Locale;
 
 public class ListFragment extends Fragment {
 
     private RecyclerView mAssignmentRecyclerView;
     private AssignmentAdapter mAdapter;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_assignment_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.new_assignment:
+                Assignment assignment = new Assignment();
+                AssignmentStorage.get(getActivity()).addAssignment(assignment);
+                Intent intent = DetailsActivity.newIntent(getActivity(), assignment.getId());
+                startActivity(intent);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Nullable
     @Override
@@ -29,7 +61,6 @@ public class ListFragment extends Fragment {
         View view = inflater.inflate(R.layout.list_fragment, parent, false);
         mAssignmentRecyclerView = view.findViewById(R.id.assignment_recycler_view);
         updateUI();
-
         return view;
     }
 
@@ -41,15 +72,17 @@ public class ListFragment extends Fragment {
 
     private void updateUI()
     {
-        AssignmentList list = AssignmentList.get(getActivity());
+        AssignmentStorage list = AssignmentStorage.get(getActivity());
         List<Assignment> assignments = list.getAssignments();
         if (mAdapter == null)
         {
             mAdapter = new AssignmentAdapter(assignments);
             mAssignmentRecyclerView.setAdapter(mAdapter);
         }
-        else
+        else {
+            mAdapter.setAssignments(assignments);
             mAdapter.notifyDataSetChanged();
+        }
     }
 
     private class AssignmentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -57,6 +90,7 @@ public class ListFragment extends Fragment {
         View currentItem;
         private TextView mTitleView;
         private TextView mDateView;
+        private TextView mSubjectView;
         private Assignment mAssignment;
         private ImageView mCompletedCheckView;
 
@@ -65,6 +99,7 @@ public class ListFragment extends Fragment {
             currentItem = v;
             currentItem.setOnClickListener(this);
             mTitleView = currentItem.findViewById(R.id.item_title);
+            mSubjectView = currentItem.findViewById(R.id.item_subject);
             mDateView = currentItem.findViewById(R.id.item_date);
             mCompletedCheckView = currentItem.findViewById(R.id.completed_check);
         }
@@ -73,13 +108,16 @@ public class ListFragment extends Fragment {
         {
             mAssignment = assignment;
             mTitleView.setText(mAssignment.getTitle());
-            mDateView.setText(mAssignment.getDueDate().toString());
+            mSubjectView.setText(mAssignment.getSubject());
+            Date date = mAssignment.getDueDate();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm a", Locale.ENGLISH);
+            mDateView.setText(simpleDateFormat.format(date));
             mCompletedCheckView.setVisibility(mAssignment.isCompleted() ? View.VISIBLE : View.INVISIBLE);
         }
 
         @Override
         public void onClick(View view) {
-            Intent intent = AssignmentPagerActivity.newIntent(getActivity(), mAssignment.getId());
+            Intent intent = DetailsActivity.newIntent(getActivity(), mAssignment.getId());
             startActivity(intent);
         }
 
@@ -104,6 +142,10 @@ public class ListFragment extends Fragment {
         public void onBindViewHolder(AssignmentHolder holder, int position) {
             Assignment assignment = mAssignments.get(position);
             holder.bind(assignment);
+        }
+
+        public void setAssignments(List<Assignment> mAssignments) {
+            this.mAssignments = mAssignments;
         }
 
         @Override

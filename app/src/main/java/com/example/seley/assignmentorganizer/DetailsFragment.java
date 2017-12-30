@@ -1,10 +1,18 @@
 package com.example.seley.assignmentorganizer;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -12,15 +20,21 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 public class DetailsFragment extends Fragment {
     private Assignment mAssignment;
     private EditText mTitleField;
+    private EditText mSubjectField;
     private CheckBox mCompletedCheckbox;
     private Button mDueDateButton;
 
     private static final String ARG_ASSIGNMENT_ID = "assignment_id";
+    private static final String DATE_PICKER_TAG = "DialogDate";
+    private static final int REQUEST_DATE = 0;
 
     public static DetailsFragment newInstance(UUID assignmentID) {
 
@@ -32,11 +46,29 @@ public class DetailsFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_assignment_details, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete_assignment:
+                AssignmentStorage.get(getActivity()).removeAssignment(mAssignment);
+                getActivity().finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UUID assignmentID = (UUID) getArguments().getSerializable(ARG_ASSIGNMENT_ID);
-        mAssignment = AssignmentList.get(getActivity()).getAssignment(assignmentID);
-
+        mAssignment = AssignmentStorage.get(getActivity()).getAssignment(assignmentID);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -61,9 +93,37 @@ public class DetailsFragment extends Fragment {
             }
         });
 
+        mSubjectField = v.findViewById(R.id.assignment_subject);
+        mSubjectField.setText(mAssignment.getSubject());
+        mSubjectField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                mAssignment.setSubject(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         mDueDateButton = v.findViewById(R.id.due_date);
         mDueDateButton.setText(mAssignment.getDueDate().toString());
-        mDueDateButton.setEnabled(false);
+        mDueDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getFragmentManager();
+                DialogFragment dialogFragment = DatePickerFragment
+                        .newInstance(mAssignment.getDueDate());
+                dialogFragment.setTargetFragment(DetailsFragment.this, REQUEST_DATE);
+                dialogFragment.show(fragmentManager, DATE_PICKER_TAG);
+            }
+        });
 
         mCompletedCheckbox = v.findViewById(R.id.completed);
         mCompletedCheckbox.setChecked(mAssignment.isCompleted());
@@ -75,5 +135,26 @@ public class DetailsFragment extends Fragment {
         });
 
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK)
+            return;
+
+        if (requestCode == REQUEST_DATE)
+        {
+            Date date = (Date) data.getSerializableExtra(DatePickerFragment.chosenDateTag);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm a", Locale.ENGLISH);
+
+            mAssignment.setDueDate(date);
+            mDueDateButton.setText(simpleDateFormat.format(date));
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        AssignmentStorage.get(getActivity()).updateAssignment(mAssignment);
     }
 }

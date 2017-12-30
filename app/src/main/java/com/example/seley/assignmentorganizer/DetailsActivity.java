@@ -8,11 +8,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.List;
 import java.util.UUID;
 
-public class AssignmentPagerActivity extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private List<Assignment> mAssignments;
@@ -24,7 +25,7 @@ public class AssignmentPagerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_assignment_pager);
         UUID assignmentID = (UUID) getIntent().getSerializableExtra(EXTRA_ASSIGNMENT_ID);
         mViewPager = findViewById(R.id.assignment_pager);
-        mAssignments = AssignmentList.get(getApplicationContext()).getAssignments();
+        mAssignments = AssignmentStorage.get(getApplicationContext()).getAssignments();
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentPagerAdapter(fragmentManager) {
             @Override
@@ -51,7 +52,7 @@ public class AssignmentPagerActivity extends AppCompatActivity {
 
     public static Intent newIntent(Context packageContext, UUID assignmentID)
     {
-        Intent intent = new Intent(packageContext, AssignmentPagerActivity.class);
+        Intent intent = new Intent(packageContext, DetailsActivity.class);
         intent.putExtra(EXTRA_ASSIGNMENT_ID, assignmentID);
         return intent;
     }

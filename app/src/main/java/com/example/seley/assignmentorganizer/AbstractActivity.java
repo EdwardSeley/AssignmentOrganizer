@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public abstract class AbstractFragment extends AppCompatActivity {
+public abstract class AbstractActivity extends AppCompatActivity {
 
     protected abstract Fragment createFragment();
 
@@ -13,7 +13,7 @@ public abstract class AbstractFragment extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.abstract_activity_fragment);
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);

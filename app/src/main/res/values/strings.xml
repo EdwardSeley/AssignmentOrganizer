@@ -1,7 +1,14 @@
 <resources>
     <string name="app_name">Assignment Organizer</string>
     <string name="title_label">Title</string>
+    <string name="subject_label">Subject</string>
     <string name="title_hint">Enter a title for the assignment</string>
-    <string name="details_label">Details</string>
+    <string name="subject_hint">Enter a subject for the assignment</string>
+    <string name="date_label">Due Date</string>
     <string name="completed_label">Completed</string>
+    <string name="date_picker_label">Due Date of Assignment: </string>
+    <string name="new_assignment">Add Assignment</string>
+    <string name="show_subtitle">Show Subtitle</string>
+    <string name="hide_subtitle">Hide Subtitle</string>
+    <string name="subtitle_format">%1$d assignments</string>
 </resources>
