@@ -1,12 +1,25 @@
 package com.example.seley.assignmentorganizer;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 
-public class ListActivity extends AbstractActivity {
+public class ListActivity extends AppCompatActivity {
 
     @Override
-    protected Fragment createFragment()
-    {
-        return new ListFragment();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.abstract_activity_fragment);
+
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+        if (fragment == null)
+        {
+            fragment = new ListFragment();
+            fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
+        }
+
     }
+
 }

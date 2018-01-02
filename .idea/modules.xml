@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AssignmentOrganizer.iml" filepath="$PROJECT_DIR$/AssignmentOrganizer.iml" />
-      <module fileurl="file://C:\Users\seley\AndroidStudioProjects\AssignmentOrganizer\AssignmentOrganizer.iml" filepath="C:\Users\seley\AndroidStudioProjects\AssignmentOrganizer\AssignmentOrganizer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\seley\AndroidStudioProjects\AssignmentOrganizer\app\app.iml" filepath="C:\Users\seley\AndroidStudioProjects\AssignmentOrganizer\app\app.iml" />
     </modules>
   </component>
 </project>

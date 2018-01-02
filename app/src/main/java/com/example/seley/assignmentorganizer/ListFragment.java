@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +26,8 @@ public class ListFragment extends Fragment {
 
     private RecyclerView mAssignmentRecyclerView;
     private AssignmentAdapter mAdapter;
+    private TextView mNoAssignmentsView;
+    private Button mNoAssignmentsButton;
 
 
     @Override
@@ -60,7 +63,20 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_fragment, parent, false);
         mAssignmentRecyclerView = view.findViewById(R.id.assignment_recycler_view);
+        mNoAssignmentsButton = view.findViewById(R.id.add_only_assignment);
+        mNoAssignmentsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Assignment assignment = new Assignment();
+                AssignmentStorage.get(getActivity()).addAssignment(assignment);
+                Intent intent = DetailsActivity.newIntent(getActivity(), assignment.getId());
+                startActivity(intent);
+            }
+        });
+
+        mNoAssignmentsView = view.findViewById(R.id.no_assignment_textView);
         updateUI();
+
         return view;
     }
 
@@ -74,10 +90,17 @@ public class ListFragment extends Fragment {
     {
         AssignmentStorage list = AssignmentStorage.get(getActivity());
         List<Assignment> assignments = list.getAssignments();
+
+        if (assignments.isEmpty())
+            mAssignmentRecyclerView.setVisibility(View.GONE);
+
         if (mAdapter == null)
         {
-            mAdapter = new AssignmentAdapter(assignments);
-            mAssignmentRecyclerView.setAdapter(mAdapter);
+            if (mAssignmentRecyclerView != null)
+            {
+                mAdapter = new AssignmentAdapter(assignments);
+                mAssignmentRecyclerView.setAdapter(mAdapter);
+            }
         }
         else {
             mAdapter.setAssignments(assignments);

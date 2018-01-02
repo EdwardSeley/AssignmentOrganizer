@@ -33,11 +33,6 @@ public class AssignmentStorage {
     {
         mContext = context;
         mDatabase = new AssignmentBaseHelper(context).getWritableDatabase();
-        Assignment assignment = new Assignment();
-        assignment.setTitle("Title");
-        assignment.setSubject("Math");
-        assignment.setCompleted(false);
-        addAssignment(assignment);
     }
 
     private static ContentValues getContentValues (Assignment assignment)
@@ -74,7 +69,6 @@ public class AssignmentStorage {
                 null,
                 null
         );
-
         return new AssignmentCursorWrapper(cursor);
     }
 
@@ -103,9 +97,23 @@ public class AssignmentStorage {
         return assignments;
     }
 
+    public boolean checkWhetherEmpty()
+    {
+        AssignmentCursorWrapper cursor = query(null, null);
+
+        try {
+            if (cursor.getCount() == 0)
+                return true;
+            else return false;
+        }
+        finally {
+            cursor.close();
+        }
+    }
+
     public Assignment getAssignment(UUID id)
     {
-        AssignmentCursorWrapper cursor = (AssignmentCursorWrapper) query(AssignmentTable.Cols.UUID + " = ?", new String[] { id.toString()});
+        AssignmentCursorWrapper cursor = query(AssignmentTable.Cols.UUID + " = ?", new String[] { id.toString()});
         if (cursor.getCount() == 0)
             return null;
         try {

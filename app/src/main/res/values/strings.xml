@@ -11,4 +11,7 @@
     <string name="show_subtitle">Show Subtitle</string>
     <string name="hide_subtitle">Hide Subtitle</string>
     <string name="subtitle_format">%1$d assignments</string>
+    <string name="no_assignments">Currently there are no assignments waiting for you.
+        Click on the button below to add one!</string>
+    <string name="add_assignment">Add Assignment</string>
 </resources>
