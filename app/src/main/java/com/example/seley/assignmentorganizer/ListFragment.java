@@ -130,10 +130,15 @@ public class ListFragment extends Fragment {
         public void bind(Assignment assignment)
         {
             mAssignment = assignment;
-            mTitleView.setText(mAssignment.getTitle());
-            mSubjectView.setText(mAssignment.getSubject());
+
+            String title = mAssignment.getTitle();
+            mTitleView.setText(title.isEmpty() ? "No Title" : title);
+
+            String subject = mAssignment.getSubject();
+            mSubjectView.setText(subject.isEmpty() ? "No Subject" : subject);
+
             Date date = mAssignment.getDueDate();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm a", Locale.ENGLISH);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy @ h:mm a", Locale.ENGLISH);
             mDateView.setText(simpleDateFormat.format(date));
             mCompletedCheckView.setVisibility(mAssignment.isCompleted() ? View.VISIBLE : View.INVISIBLE);
         }

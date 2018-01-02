@@ -34,7 +34,9 @@ public class DetailsFragment extends Fragment {
 
     private static final String ARG_ASSIGNMENT_ID = "assignment_id";
     private static final String DATE_PICKER_TAG = "DialogDate";
+    private static final String TIME_PICKER_TAG = "DialogTime";
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_TIME = 1;
 
     public static DetailsFragment newInstance(UUID assignmentID) {
 
@@ -113,7 +115,8 @@ public class DetailsFragment extends Fragment {
         });
 
         mDueDateButton = v.findViewById(R.id.due_date);
-        mDueDateButton.setText(mAssignment.getDueDate().toString());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy @ h:mm a", Locale.ENGLISH);
+        mDueDateButton.setText(simpleDateFormat.format(mAssignment.getDueDate()));
         mDueDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,10 +148,20 @@ public class DetailsFragment extends Fragment {
         if (requestCode == REQUEST_DATE)
         {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.chosenDateTag);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm a", Locale.ENGLISH);
+            FragmentManager fragmentManager = getFragmentManager();
+            DialogFragment dialogFragment = TimePickerFragment
+                    .newInstance(date);
+            dialogFragment.setTargetFragment(DetailsFragment.this, REQUEST_TIME);
+            dialogFragment.show(fragmentManager, TIME_PICKER_TAG);
 
-            mAssignment.setDueDate(date);
+        }
+
+        if (requestCode == REQUEST_TIME)
+        {
+            Date date = (Date) data.getSerializableExtra(TimePickerFragment.chosenTimeTag);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy @ h:mm a", Locale.ENGLISH);
             mDueDateButton.setText(simpleDateFormat.format(date));
+            mAssignment.setDueDate(date);
         }
     }
 
