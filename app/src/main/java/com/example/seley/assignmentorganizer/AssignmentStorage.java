@@ -21,6 +21,7 @@ public class AssignmentStorage {
     private static AssignmentStorage sAssignment;
     private Context mContext;
     private SQLiteDatabase mDatabase;
+    private AssignmentNotificationManager notificationManager;
 
     public static AssignmentStorage get(Context context)
     {
@@ -33,6 +34,7 @@ public class AssignmentStorage {
     {
         mContext = context;
         mDatabase = new AssignmentBaseHelper(context).getWritableDatabase();
+        notificationManager = new AssignmentNotificationManager(context);
     }
 
     private static ContentValues getContentValues (Assignment assignment)
@@ -49,6 +51,7 @@ public class AssignmentStorage {
     public void addAssignment(Assignment assignment) {
         ContentValues values = getContentValues(assignment);
         mDatabase.insert(AssignmentTable.NAME, null, values);
+        notificationManager.addNotification(assignment);
     }
 
     public void updateAssignment(Assignment assignment)
@@ -56,6 +59,7 @@ public class AssignmentStorage {
         String uuidString = assignment.getId().toString();
         ContentValues values = getContentValues(assignment);
         mDatabase.update(AssignmentTable.NAME, values, AssignmentTable.Cols.UUID + " = ?", new String[] {uuidString});
+        notificationManager.updateNotification(assignment);
     }
 
     private AssignmentCursorWrapper query(String whereClause, String[] whereArgs)
@@ -74,6 +78,7 @@ public class AssignmentStorage {
 
     public void removeAssignment(Assignment assignment) {
         mDatabase.delete(AssignmentTable.NAME, AssignmentTable.Cols.UUID + " = ?", new String[]{assignment.getId().toString()});
+        notificationManager.removeNotification(assignment);
     }
 
     public List<Assignment> getAssignments()
@@ -95,20 +100,6 @@ public class AssignmentStorage {
             cursor.close();
         }
         return assignments;
-    }
-
-    public boolean checkWhetherEmpty()
-    {
-        AssignmentCursorWrapper cursor = query(null, null);
-
-        try {
-            if (cursor.getCount() == 0)
-                return true;
-            else return false;
-        }
-        finally {
-            cursor.close();
-        }
     }
 
     public Assignment getAssignment(UUID id)

@@ -1,5 +1,6 @@
 package com.example.seley.assignmentorganizer;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -18,7 +19,13 @@ public class Assignment {
     public Assignment(UUID uuid)
     {
         mId = uuid;
+        mTitle = "";
+        mSubject = "";
         mDueDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(mDueDate);
+        calendar.add(Calendar.DATE, 1);
+        mDueDate = calendar.getTime();
     }
 
     public UUID getId() {
