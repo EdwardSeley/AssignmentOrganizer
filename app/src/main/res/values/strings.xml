@@ -1,17 +1,17 @@
 <resources>
-    <string name="app_name">Assignment Organizer</string>
+    <string name="app_name">Task Organizer</string>
     <string name="title_label">Title</string>
     <string name="subject_label">Subject</string>
-    <string name="title_hint">Enter a title for the assignment</string>
-    <string name="subject_hint">Enter a subject for the assignment</string>
+    <string name="title_hint">Enter a title for the task</string>
+    <string name="subject_hint">Enter a subject for the task</string>
     <string name="date_label">Due Date</string>
     <string name="completed_label">Completed</string>
-    <string name="date_picker_label">Due Date of Assignment: </string>
-    <string name="new_assignment">Add Assignment</string>
+    <string name="date_picker_label">Due Date of Task: </string>
+    <string name="new_task">Add Task</string>
     <string name="show_subtitle">Show Subtitle</string>
     <string name="hide_subtitle">Hide Subtitle</string>
-    <string name="subtitle_format">%1$d assignments</string>
-    <string name="no_assignments">Currently there are no assignments waiting for you.
+    <string name="subtitle_format">%1$d tasks</string>
+    <string name="no_tasks">Currently there are no tasks waiting for you.
         Click on the button below to add one!</string>
-    <string name="add_assignment">Add Assignment</string>
+    <string name="add_task">Add Task</string>
 </resources>

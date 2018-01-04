@@ -1,13 +1,11 @@
-package com.example.seley.assignmentorganizer;
+package com.example.seley.taskorganizer;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
-public abstract class AbstractActivity extends AppCompatActivity {
-
-    protected abstract Fragment createFragment();
+public class ListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,9 +16,10 @@ public abstract class AbstractActivity extends AppCompatActivity {
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
         if (fragment == null)
         {
-            fragment = createFragment();
+            fragment = new ListFragment();
             fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
 
     }
+
 }

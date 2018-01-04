@@ -1,4 +1,4 @@
-package com.example.seley.assignmentorganizer;
+package com.example.seley.taskorganizer;
 
 
 import android.app.Activity;
@@ -8,23 +8,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TimePicker;
 
-import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 
 public class TimePickerFragment extends DialogFragment {
 
     private TimePicker mTimePicker;
-    public static String TAG = "com.example.seley.assignmentorganizer.date";
-    public static String chosenTimeTag = "com.example.seley.assignmentorganizer.time";
+    public static String TAG = "com.example.seley.taskorganizer.date";
+    public static String chosenTimeTag = "com.example.seley.taskorganizer.time";
 
     public static TimePickerFragment newInstance(Date date) {
         Bundle args = new Bundle();
@@ -48,7 +44,7 @@ public class TimePickerFragment extends DialogFragment {
         mTimePicker.setMinute(calendar.get(Calendar.MINUTE));
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("Time When Assignment is Due:")
+                .setTitle("Time When Task is Due:")
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

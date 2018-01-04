@@ -1,4 +1,4 @@
-package com.example.seley.assignmentorganizer;
+package com.example.seley.taskorganizer;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.seley.assignmentorganizer;
+package com.example.seley.taskorganizer;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,33 +15,33 @@ import java.util.UUID;
 public class DetailsActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
-    private List<Assignment> mAssignments;
-    public static String EXTRA_ASSIGNMENT_ID = "ASSIGNMENT_ID";
+    private List<Task> mTasks;
+    public static String EXTRA_TASK_ID = "TASK_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_assignment_pager);
-        UUID assignmentID = (UUID) getIntent().getSerializableExtra(EXTRA_ASSIGNMENT_ID);
-        mViewPager = findViewById(R.id.assignment_pager);
-        mAssignments = AssignmentStorage.get(getApplicationContext()).getAssignments();
+        setContentView(R.layout.activity_task_pager);
+        UUID taskID = (UUID) getIntent().getSerializableExtra(EXTRA_TASK_ID);
+        mViewPager = findViewById(R.id.task_pager);
+        mTasks = TaskStorage.get(getApplicationContext()).getTasks();
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentPagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {
-                Assignment assignment = mAssignments.get(position);
-                return DetailsFragment.newInstance(assignment.getId());
+                Task task = mTasks.get(position);
+                return DetailsFragment.newInstance(task.getId());
             }
 
             @Override
             public int getCount() {
-                return mAssignments.size();
+                return mTasks.size();
             }
         });
 
-        for (int i = 0; i < mAssignments.size(); i++)
+        for (int i = 0; i < mTasks.size(); i++)
         {
-            if (mAssignments.get(i).getId().equals(assignmentID))
+            if (mTasks.get(i).getId().equals(taskID))
             {
                 mViewPager.setCurrentItem(i);
                 break;
@@ -50,10 +49,10 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    public static Intent newIntent(Context packageContext, UUID assignmentID)
+    public static Intent newIntent(Context packageContext, UUID taskID)
     {
         Intent intent = new Intent(packageContext, DetailsActivity.class);
-        intent.putExtra(EXTRA_ASSIGNMENT_ID, assignmentID);
+        intent.putExtra(EXTRA_TASK_ID, taskID);
         return intent;
     }
 

@@ -13,7 +13,7 @@
         android:text="@string/title_label" />
 
     <EditText
-        android:id="@+id/assignment_title"
+        android:id="@+id/task_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/title_hint" />
@@ -25,7 +25,7 @@
         style="?android:listSeparatorTextViewStyle"/>
 
     <EditText
-        android:id="@+id/assignment_subject"
+        android:id="@+id/task_subject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/subject_hint" />

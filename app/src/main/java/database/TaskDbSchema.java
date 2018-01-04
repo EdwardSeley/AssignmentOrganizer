@@ -1,9 +1,9 @@
 package database;
 
-public class AssignmentDbSchema {
+public class TaskDbSchema {
 
-    public static class AssignmentTable {
-        public static final String NAME = "assignments";
+    public static class TaskTable {
+        public static final String NAME = "tasks";
 
         public static final class Cols {
 

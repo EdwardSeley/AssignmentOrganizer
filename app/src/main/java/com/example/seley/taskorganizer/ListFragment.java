@@ -1,4 +1,4 @@
-package com.example.seley.assignmentorganizer;
+package com.example.seley.taskorganizer;
 
 
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,10 +23,9 @@ import java.util.Locale;
 
 public class ListFragment extends Fragment {
 
-    private RecyclerView mAssignmentRecyclerView;
-    private AssignmentAdapter mAdapter;
-    private TextView mNoAssignmentsView;
-    private Button mNoAssignmentsButton;
+    private RecyclerView mTaskRecyclerView;
+    private TaskAdapter mAdapter;
+    private Button mNoTasksButton;
 
 
     @Override
@@ -39,17 +37,17 @@ public class ListFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_assignment_list, menu);
+        inflater.inflate(R.menu.fragment_task_list, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
-            case R.id.new_assignment:
-                Assignment assignment = new Assignment();
-                AssignmentStorage.get(getActivity()).addAssignment(assignment);
-                Intent intent = DetailsActivity.newIntent(getActivity(), assignment.getId());
+            case R.id.new_task:
+                Task task = new Task();
+                TaskStorage.get(getActivity()).addTask(task);
+                Intent intent = DetailsActivity.newIntent(getActivity(), task.getId());
                 startActivity(intent);
                 return true;
 
@@ -62,19 +60,17 @@ public class ListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_fragment, parent, false);
-        mAssignmentRecyclerView = view.findViewById(R.id.assignment_recycler_view);
-        mNoAssignmentsButton = view.findViewById(R.id.add_only_assignment);
-        mNoAssignmentsButton.setOnClickListener(new View.OnClickListener() {
+        mTaskRecyclerView = view.findViewById(R.id.task_recycler_view);
+        mNoTasksButton = view.findViewById(R.id.add_only_task);
+        mNoTasksButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Assignment assignment = new Assignment();
-                AssignmentStorage.get(getActivity()).addAssignment(assignment);
-                Intent intent = DetailsActivity.newIntent(getActivity(), assignment.getId());
+                Task task = new Task();
+                TaskStorage.get(getActivity()).addTask(task);
+                Intent intent = DetailsActivity.newIntent(getActivity(), task.getId());
                 startActivity(intent);
             }
         });
-
-        mNoAssignmentsView = view.findViewById(R.id.no_assignment_textView);
         updateUI();
 
         return view;
@@ -88,36 +84,36 @@ public class ListFragment extends Fragment {
 
     private void updateUI()
     {
-        AssignmentStorage list = AssignmentStorage.get(getActivity());
-        List<Assignment> assignments = list.getAssignments();
+        TaskStorage list = TaskStorage.get(getActivity());
+        List<Task> tasks = list.getTasks();
 
-        if (assignments.isEmpty())
-            mAssignmentRecyclerView.setVisibility(View.GONE);
+        if (tasks.isEmpty())
+            mTaskRecyclerView.setVisibility(View.GONE);
 
         if (mAdapter == null)
         {
-            if (mAssignmentRecyclerView != null)
+            if (mTaskRecyclerView != null)
             {
-                mAdapter = new AssignmentAdapter(assignments);
-                mAssignmentRecyclerView.setAdapter(mAdapter);
+                mAdapter = new TaskAdapter(tasks);
+                mTaskRecyclerView.setAdapter(mAdapter);
             }
         }
         else {
-            mAdapter.setAssignments(assignments);
+            mAdapter.setTasks(tasks);
             mAdapter.notifyDataSetChanged();
         }
     }
 
-    private class AssignmentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class TaskHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         View currentItem;
         private TextView mTitleView;
         private TextView mDateView;
         private TextView mSubjectView;
-        private Assignment mAssignment;
+        private Task mTask;
         private ImageView mCompletedCheckView;
 
-        public AssignmentHolder(View v) {
+        public TaskHolder(View v) {
             super(v);
             currentItem = v;
             currentItem.setOnClickListener(this);
@@ -127,58 +123,58 @@ public class ListFragment extends Fragment {
             mCompletedCheckView = currentItem.findViewById(R.id.completed_check);
         }
 
-        public void bind(Assignment assignment)
+        public void bind(Task task)
         {
-            mAssignment = assignment;
+            mTask = task;
 
-            String title = mAssignment.getTitle();
+            String title = mTask.getTitle();
             mTitleView.setText(title.isEmpty() ? "No Title" : title);
 
-            String subject = mAssignment.getSubject();
+            String subject = mTask.getSubject();
             mSubjectView.setText(subject.isEmpty() ? "No Subject" : subject);
 
-            Date date = mAssignment.getDueDate();
+            Date date = mTask.getDueDate();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy @ h:mm a", Locale.ENGLISH);
             mDateView.setText(simpleDateFormat.format(date));
-            mCompletedCheckView.setVisibility(mAssignment.isCompleted() ? View.VISIBLE : View.INVISIBLE);
+            mCompletedCheckView.setVisibility(mTask.isCompleted() ? View.VISIBLE : View.INVISIBLE);
         }
 
         @Override
         public void onClick(View view) {
-            Intent intent = DetailsActivity.newIntent(getActivity(), mAssignment.getId());
+            Intent intent = DetailsActivity.newIntent(getActivity(), mTask.getId());
             startActivity(intent);
         }
 
     }
 
-    private class AssignmentAdapter extends RecyclerView.Adapter<AssignmentHolder> {
+    private class TaskAdapter extends RecyclerView.Adapter<TaskHolder> {
 
-        private List<Assignment> mAssignments;
+        private List<Task> mTasks;
 
-        AssignmentAdapter(List<Assignment> assignments)
+        TaskAdapter(List<Task> tasks)
         {
-            mAssignments = assignments;
+            mTasks = tasks;
         }
 
         @Override
-        public AssignmentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public TaskHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            return new AssignmentHolder(layoutInflater.inflate(R.layout.list_item, parent, false));
+            return new TaskHolder(layoutInflater.inflate(R.layout.list_item, parent, false));
         }
 
         @Override
-        public void onBindViewHolder(AssignmentHolder holder, int position) {
-            Assignment assignment = mAssignments.get(position);
-            holder.bind(assignment);
+        public void onBindViewHolder(TaskHolder holder, int position) {
+            Task task = mTasks.get(position);
+            holder.bind(task);
         }
 
-        public void setAssignments(List<Assignment> mAssignments) {
-            this.mAssignments = mAssignments;
+        public void setTasks(List<Task> mTasks) {
+            this.mTasks = mTasks;
         }
 
         @Override
         public int getItemCount() {
-            return mAssignments.size();
+            return mTasks.size();
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.seley.assignmentorganizer;
+package com.example.seley.taskorganizer;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,22 +25,22 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class DetailsFragment extends Fragment {
-    private Assignment mAssignment;
+    private Task mTask;
     private EditText mTitleField;
     private EditText mSubjectField;
     private CheckBox mCompletedCheckbox;
     private Button mDueDateButton;
 
-    private static final String ARG_ASSIGNMENT_ID = "assignment_id";
+    private static final String ARG_TASK_ID = "task_id";
     private static final String DATE_PICKER_TAG = "DialogDate";
     private static final String TIME_PICKER_TAG = "DialogTime";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_TIME = 1;
 
-    public static DetailsFragment newInstance(UUID assignmentID) {
+    public static DetailsFragment newInstance(UUID taskID) {
 
         Bundle args = new Bundle();
-        args.putSerializable(ARG_ASSIGNMENT_ID, assignmentID);
+        args.putSerializable(ARG_TASK_ID, taskID);
         DetailsFragment fragment = new DetailsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -50,14 +49,14 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_assignment_details, menu);
+        inflater.inflate(R.menu.fragment_task_details, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.delete_assignment:
-                AssignmentStorage.get(getActivity()).removeAssignment(mAssignment);
+            case R.id.delete_task:
+                TaskStorage.get(getActivity()).removeTask(mTask);
                 getActivity().finish();
                 return true;
             default:
@@ -68,16 +67,16 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UUID assignmentID = (UUID) getArguments().getSerializable(ARG_ASSIGNMENT_ID);
-        mAssignment = AssignmentStorage.get(getActivity()).getAssignment(assignmentID);
+        UUID taskID = (UUID) getArguments().getSerializable(ARG_TASK_ID);
+        mTask = TaskStorage.get(getActivity()).getTask(taskID);
         setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.details_fragment, container, false);
-        mTitleField = v.findViewById(R.id.assignment_title);
-        mTitleField.setText(mAssignment.getTitle());
+        mTitleField = v.findViewById(R.id.task_title);
+        mTitleField.setText(mTask.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -86,7 +85,7 @@ public class DetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                mAssignment.setTitle(charSequence.toString());
+                mTask.setTitle(charSequence.toString());
             }
 
             @Override
@@ -95,8 +94,8 @@ public class DetailsFragment extends Fragment {
             }
         });
 
-        mSubjectField = v.findViewById(R.id.assignment_subject);
-        mSubjectField.setText(mAssignment.getSubject());
+        mSubjectField = v.findViewById(R.id.task_subject);
+        mSubjectField.setText(mTask.getSubject());
         mSubjectField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -105,7 +104,7 @@ public class DetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                mAssignment.setSubject(charSequence.toString());
+                mTask.setSubject(charSequence.toString());
             }
 
             @Override
@@ -116,24 +115,24 @@ public class DetailsFragment extends Fragment {
 
         mDueDateButton = v.findViewById(R.id.due_date);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy @ h:mm a", Locale.ENGLISH);
-        mDueDateButton.setText(simpleDateFormat.format(mAssignment.getDueDate()));
+        mDueDateButton.setText(simpleDateFormat.format(mTask.getDueDate()));
         mDueDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager fragmentManager = getFragmentManager();
                 DialogFragment dialogFragment = DatePickerFragment
-                        .newInstance(mAssignment.getDueDate());
+                        .newInstance(mTask.getDueDate());
                 dialogFragment.setTargetFragment(DetailsFragment.this, REQUEST_DATE);
                 dialogFragment.show(fragmentManager, DATE_PICKER_TAG);
             }
         });
 
         mCompletedCheckbox = v.findViewById(R.id.completed);
-        mCompletedCheckbox.setChecked(mAssignment.isCompleted());
+        mCompletedCheckbox.setChecked(mTask.isCompleted());
         mCompletedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                mAssignment.setCompleted(isChecked);
+                mTask.setCompleted(isChecked);
             }
         });
 
@@ -161,13 +160,13 @@ public class DetailsFragment extends Fragment {
             Date date = (Date) data.getSerializableExtra(TimePickerFragment.chosenTimeTag);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy @ h:mm a", Locale.ENGLISH);
             mDueDateButton.setText(simpleDateFormat.format(date));
-            mAssignment.setDueDate(date);
+            mTask.setDueDate(date);
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        AssignmentStorage.get(getActivity()).updateAssignment(mAssignment);
+        TaskStorage.get(getActivity()).updateTask(mTask);
     }
 }

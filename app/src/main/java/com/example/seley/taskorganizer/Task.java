@@ -1,22 +1,22 @@
-package com.example.seley.assignmentorganizer;
+package com.example.seley.taskorganizer;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
-public class Assignment {
+public class Task {
     private UUID mId;
     private String mTitle;
     private Date mDueDate;
     private String mSubject;
     private boolean mCompleted;
 
-    public Assignment()
+    public Task()
     {
         this(UUID.randomUUID());
     }
 
-    public Assignment(UUID uuid)
+    public Task(UUID uuid)
     {
         mId = uuid;
         mTitle = "";

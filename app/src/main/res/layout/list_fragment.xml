@@ -2,7 +2,7 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/no_assignments_layout"
+    android:id="@+id/no_tasks_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -11,7 +11,7 @@
     <android.support.v7.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/assignment_recycler_view"
+        android:id="@+id/task_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
@@ -25,10 +25,10 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/no_assignment_textView"
+            android:id="@+id/no_task_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_assignments"
+            android:text="@string/no_tasks"
             android:textSize="18sp"
             android:layout_gravity="center"
             android:textAlignment="center"
@@ -36,10 +36,10 @@
             />
 
         <Button
-            android:id="@+id/add_only_assignment"
+            android:id="@+id/add_only_task"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_assignment"
+            android:text="@string/add_task"
             android:layout_gravity="center"
             android:layout_margin="8dp"
             android:textAllCaps="false"
